@@ -1,42 +1,72 @@
-import { useEffect, useState } from 'react'
-import CSALogo from './CSALogo'
+import React, { useState } from 'react';
+import { NAV_LINKS } from '../constants';
+import CSALogo from './CSALogo';
+// import Logo from '../assets/logo.svg';
 
-function Clock() {
-  const [now, setNow] = useState(() => new Date())
-  useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 1000)
-    return () => clearInterval(id)
-  }, [])
-  return (
-    <span className="tabular-nums text-sm text-orange-300">
-      {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-    </span>
-  )
-}
+const Header = () => {
+  const [isOpen, setIsOpen] = useState(true);
+  const [isAnimating, setIsAnimating] = useState(false);
 
-export default function Navbar() {
+  const leftLinks = NAV_LINKS.slice(0, 2);
+  const rightLinks = NAV_LINKS.slice(2);
+
+  const handleToggle = () => {
+    setIsAnimating(true);
+    setIsOpen((prev) => !prev);
+  };
+
   return (
-    <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-black/80 border-b border-white/10">
-      <div className="container-xl h-14 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <CSALogo className="w-8 h-8" />
-          <span className="font-semibold tracking-wide text-white">CSA Tech Club</span>
-        </div>
-        <nav className="hidden md:flex items-center gap-6 text-sm text-white/80">
-          <a href="#about" className="hover:text-white transition-colors">About</a>
-          <a href="#events" className="hover:text-white transition-colors">Events</a>
-          <a href="#domain" className="hover:text-white transition-colors">Domain</a>
-          <a href="#join" className="hover:text-white transition-colors">Join</a>
+    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center p-4">
+      <div className="relative flex items-center justify-center h-16">
+        {/* Expanding Nav */}
+        <nav
+          className={`flex items-center justify-between h-16 bg-black/80 backdrop-blur-sm border border-red-500 rounded-full shadow-[0_0_20px_theme(colors.red.500/0.5)] transition-all duration-700 ease-in-out overflow-hidden ${
+            isOpen ? 'w-full max-w-4xl px-8 opacity-100' : 'w-16 px-0 opacity-0 pointer-events-none'
+          }`}
+        >
+          {/* Left Links */}
+          <div className="flex items-center space-x-10">
+            {leftLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-gray-300 hover:text-red-400 transition-colors duration-300 font-medium whitespace-nowrap"
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
+
+          {/* Spacer for Logo */}
+          <div className="w-16 shrink-0 mx-4"></div>
+
+          {/* Right Links */}
+          <div className="flex items-center space-x-10">
+            {rightLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-gray-300 hover:text-red-400 transition-colors duration-300 font-medium whitespace-nowrap"
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
         </nav>
-        <div className="flex items-center gap-4">
-          <Clock />
-          <a href="#join" className="inline-flex h-9 items-center rounded-md bg-orange-500 px-3 text-sm font-medium text-black hover:bg-orange-400 transition-colors">
-            Join Us
-          </a>
-        </div>
+
+        {/* Clickable Logo */}
+        <button
+          onClick={handleToggle}
+          onAnimationEnd={() => setIsAnimating(false)}
+          className={`absolute z-10 w-16 h-16 bg-black rounded-full border-2 border-orange-500 flex items-center justify-center hover:border-orange-400 transition-colors ${
+            isAnimating ? 'animate-[spin-once_0.7s_ease-in-out]' : ''
+          }`}
+        >
+          <CSALogo className="w-8 h-8" />
+        </button>
       </div>
     </header>
-  )
-}
+  );
+};
 
-
+export default Header;

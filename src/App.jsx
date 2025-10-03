@@ -7,6 +7,11 @@ import Features from './components/Features'
 import LiveStrip from './components/LiveStrip'
 import Footer from './components/Footer'
 import Logo3D from './components/Logo3D'
+import Domains from './components/Domains'
+import Events from './components/Events'
+import Team from './components/Team'
+import FAQ from './components/FAQ'
+import About from './components/About'
 
 function App() {
   const [showIntro, setShowIntro] = useState(true)
@@ -19,14 +24,19 @@ function App() {
     <>
       {showIntro && <LogoIntro onComplete={handleIntroComplete} />}
       
-      <div className={`min-h-screen w-full gradient-grid transition-opacity duration-500 ${showIntro ? 'opacity-0' : 'opacity-100'}`}>
-        <Navbar />
+      <div className="gradient-grid">
+        {!showIntro && <Navbar />}
         <main>
           <Hero />
           {/* <Logo3D /> */}
           <section className="container-xl space-y-24 pt-16">
-            <LiveStrip />
-            <Features />
+            {/* <LiveStrip /> */}
+            {/* <Features /> */}
+            <About />
+            <Domains />
+            <Events />
+            <Team />
+            <FAQ />
           </section>
         </main>
         <Footer />
